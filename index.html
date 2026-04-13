@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Playlist del Disco</title>
+
+  <!-- Librería para arrastrar -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    li {
+      background: #222;
+      margin: 8px 0;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 8px;
+      cursor: grab;
+    }
+
+    button {
+      background: #1db954;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1ed760;
+    }
+
+    #player {
+      display: block;
+      margin: 20px auto;
+    }
+
+    #export {
+      display: block;
+      margin: 20px auto;
+      background: #444;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Orden del Disco</h1>
+
+<!-- 👇 ACÁ VAN LOS TEMAS -->
+<ul id="playlist">
+
+  <li data-src="https://www.dropbox.com/scl/fi/m06at81vanme2w04vic1s/01-Caparazon.mp3?rlkey=dgw1n1c6kd2wh3wkc4mk7ggx5&st=zouaiycm&raw=1">
+    Caparazón
+    <button onclick="play(this)">▶</button>
+  </li>
+
+  <li data-src="https://www.dropbox.com/scl/fi/cdr3k0zn9qgsd4gfelpei/02-Intento-13042026.mp3?rlkey=3xxijxnob95m6ulxzaz0olbms&st=53mjo48k&raw=1">
+    Intento
+    <button onclick="play(this)">▶</button>
+  </li>
+
+  <li data-src="https://www.dropbox.com/scl/fi/qiztpu2fpp9hd72wj3trf/03-Nada-es-lo-que-parece-032026-no-low.mp3?rlkey=edidpr7ptari7l85hq5mlxa70&st=ckkcsv92&raw=1">
+    Nada es lo que parece
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/rurg7n63kgihmr20d307g/04-Sin-red.mp3?rlkey=qrzrvlpye20mvq1beufxd3d0m&st=9ao8p4c8&raw=1">
+    Sin red
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/g98f3t0rf8psgi9qekaho/05-Me-cuesta-pensar-en-vos-13042026.mp3?rlkey=gtw1n3ilc0s99sabk3y6lxkr1&st=ht7j7h3f&raw=1">
+    Me cuesta pensar en vos
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/3lzqt230us6y7uujj8nqs/06-Amigo-Primavera.mp3?rlkey=koe4m07weh9oxdlok9y5b7frf&st=rtrl8hdd&raw=1">
+    Amigo primavera
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/sf18y19zoxsblpoo3cn9y/07-El-camino.mp3?rlkey=z8bbvccu18zl7j7f8g5tiisu8&st=4v3whp47&raw=1">
+    El camino
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/3pf92qrda8hrpcdj2rcp5/08-FARO-v3.mp3?rlkey=kmxrstg8wuuutq8fq5f5rc020&st=ibsdisk6&raw=1">
+    Faro
+    <button onclick="play(this)">▶</button>
+  </li>
+  <li data-src="https://www.dropbox.com/scl/fi/ohnrs45i92o5dxowp6wc5/09-COMO-ESTAS-VOS.mp3?rlkey=jiekkjvn5p1nixkzdaxcm4gdz&st=y9bvt1pw&raw=1">
+    Cómo estás vos
+    <button onclick="play(this)">▶</button>
+  </li>
+
+</ul>
+
+<!-- Reproductor -->
+<audio id="player" controls></audio>
+
+<!-- Botón copiar orden -->
+<button id="export" onclick="exportOrder()">Copiar orden</button>
+
+<script>
+  const player = document.getElementById("player");
+
+  function play(btn) {
+    const li = btn.parentElement;
+    const src = li.getAttribute("data-src");
+    player.src = src;
+    player.play();
+  }
+
+  new Sortable(document.getElementById("playlist"), {
+    animation: 150
+  });
+
+  function exportOrder() {
+    const items = document.querySelectorAll("#playlist li");
+    let text = "Orden del disco:\n";
+
+    items.forEach((item, index) => {
+      text += (index + 1) + ". " + item.childNodes[0].textContent.trim() + "\n";
+    });
+
+    navigator.clipboard.writeText(text);
+    alert("Orden copiado al portapapeles");
+  }
+</script>
+
+</body>
+</html>
