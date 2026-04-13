@@ -13,7 +13,7 @@ body {
   background: #111;
   color: white;
   margin: 0;
-  padding: 15px 15px 90px;
+  padding: 15px 15px 100px;
 }
 
 h1 {
@@ -45,11 +45,6 @@ li {
   margin: 10px 0;
   padding: 12px;
   border-radius: 12px;
-  transition: 0.2s;
-}
-
-li:active {
-  transform: scale(0.98);
 }
 
 .active {
@@ -58,12 +53,35 @@ li:active {
 
 .row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.handle {
+  font-size: 18px;
+  cursor: grab;
+  color: #aaa;
+}
+
+.number {
+  width: 25px;
+  text-align: right;
+  color: #ccc;
 }
 
 .title {
   font-size: 15px;
+}
+
+.duration {
+  font-size: 12px;
+  color: #aaa;
 }
 
 .play-btn {
@@ -97,7 +115,6 @@ input {
   border-radius: 8px;
 }
 
-/* PLAYER FIJO ABAJO */
 .player-bar {
   position: fixed;
   bottom: 0;
@@ -105,7 +122,6 @@ input {
   width: 100%;
   background: #000;
   padding: 10px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
 }
 
 .player-bar audio {
@@ -117,50 +133,41 @@ input {
 <body>
 
 <h1>Orden del Disco</h1>
-<p>Arrastrar · Tocar para reproducir</p>
+<p>Arrastrar desde ≡ · Tocar para reproducir</p>
 
 <img src="PEGAR_LINK_TAPA">
 
 <ul id="playlist">
 
 <li data-src="https://www.dropbox.com/scl/fi/m06at81vanme2w04vic1s/01-Caparazon.mp3?rlkey=dgw1n1c6kd2wh3wkc4mk7ggx5&st=zouaiycm&raw=1">
-    Caparazón
-    <button onclick="play(this)">▶</button>
-  </li>
+  <div class="row">
+    <div class="left" onclick="playItem(this)">
+      <span class="handle">≡</span>
+      <span class="number">1</span>
+      <span>
+        <div class="title">Caparazón</div>
+        <div class="duration">--:--</div>
+      </span>
+    </div>
+    <button class="play-btn" onclick="play(this)">▶</button>
+  </div>
+  <input placeholder="Comentario">
+</li>
 
-  <li data-src="https://www.dropbox.com/scl/fi/cdr3k0zn9qgsd4gfelpei/02-Intento-13042026.mp3?rlkey=3xxijxnob95m6ulxzaz0olbms&st=53mjo48k&raw=1">
-    Intento
-    <button onclick="play(this)">▶</button>
-  </li>
-
-  <li data-src="https://www.dropbox.com/scl/fi/qiztpu2fpp9hd72wj3trf/03-Nada-es-lo-que-parece-032026-no-low.mp3?rlkey=edidpr7ptari7l85hq5mlxa70&st=ckkcsv92&raw=1">
-    Nada es lo que parece
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/rurg7n63kgihmr20d307g/04-Sin-red.mp3?rlkey=qrzrvlpye20mvq1beufxd3d0m&st=9ao8p4c8&raw=1">
-    Sin red
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/g98f3t0rf8psgi9qekaho/05-Me-cuesta-pensar-en-vos-13042026.mp3?rlkey=gtw1n3ilc0s99sabk3y6lxkr1&st=ht7j7h3f&raw=1">
-    Me cuesta pensar en vos
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/3lzqt230us6y7uujj8nqs/06-Amigo-Primavera.mp3?rlkey=koe4m07weh9oxdlok9y5b7frf&st=rtrl8hdd&raw=1">
-    Amigo primavera
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/sf18y19zoxsblpoo3cn9y/07-El-camino.mp3?rlkey=z8bbvccu18zl7j7f8g5tiisu8&st=4v3whp47&raw=1">
-    El camino
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/3pf92qrda8hrpcdj2rcp5/08-FARO-v3.mp3?rlkey=kmxrstg8wuuutq8fq5f5rc020&st=ibsdisk6&raw=1">
-    Faro
-    <button onclick="play(this)">▶</button>
-  </li>
-  <li data-src="https://www.dropbox.com/scl/fi/ohnrs45i92o5dxowp6wc5/09-COMO-ESTAS-VOS.mp3?rlkey=jiekkjvn5p1nixkzdaxcm4gdz&st=y9bvt1pw&raw=1">
-    Cómo estás vos
-    <button onclick="play(this)">▶</button>
-  </li>
+<li data-src="https://www.dropbox.com/scl/fi/cdr3k0zn9qgsd4gfelpei/02-Intento-13042026.mp3?rlkey=3xxijxnob95m6ulxzaz0olbms&st=53mjo48k&raw=1">
+  <div class="row">
+    <div class="left" onclick="playItem(this)">
+      <span class="handle">≡</span>
+      <span class="number">2</span>
+      <span>
+        <div class="title">Intento</div>
+        <div class="duration">--:--</div>
+      </span>
+    </div>
+    <button class="play-btn" onclick="play(this)">▶</button>
+  </div>
+  <input placeholder="Comentario">
+</li>
 
 </ul>
 
@@ -176,16 +183,18 @@ input {
 <script>
 const player = document.getElementById("player");
 
+/* PLAY */
 function play(btn) {
   const li = btn.closest("li");
-  activateAndPlay(li);
+  activate(li);
 }
 
-function playItem(li) {
-  activateAndPlay(li);
+function playItem(el) {
+  const li = el.closest("li");
+  activate(li);
 }
 
-function activateAndPlay(li) {
+function activate(li) {
   document.querySelectorAll("li").forEach(el => el.classList.remove("active"));
   li.classList.add("active");
 
@@ -193,20 +202,18 @@ function activateAndPlay(li) {
   player.play();
 }
 
-/* AUTOPLAY SIGUIENTE */
+/* AUTOPLAY */
 player.addEventListener("ended", () => {
   const current = document.querySelector(".active");
   if (!current) return;
-
   const next = current.nextElementSibling;
-  if (next) activateAndPlay(next);
+  if (next) activate(next);
 });
 
 /* NUMERACIÓN */
 function updateNumbers() {
   document.querySelectorAll("#playlist li").forEach((item, i) => {
-    const title = item.querySelector(".title");
-    title.textContent = (i+1) + ". " + title.textContent.replace(/^\d+\.\s/, '');
+    item.querySelector(".number").textContent = i + 1;
   });
 }
 
@@ -235,7 +242,7 @@ function loadOrder() {
 function exportOrder() {
   let text = "Orden del disco:\n";
   document.querySelectorAll("#playlist li").forEach((item, i) => {
-    const title = item.querySelector(".title").textContent.replace(/^\d+\.\s/, '');
+    const title = item.querySelector(".title").textContent;
     text += (i+1) + ". " + title + "\n";
   });
   navigator.clipboard.writeText(text);
@@ -251,15 +258,36 @@ function resetOrder() {
 /* DRAG */
 new Sortable(document.getElementById("playlist"), {
   animation: 150,
+  handle: ".handle",
   onEnd: () => {
     updateNumbers();
     saveOrder();
   }
 });
 
+/* FORMATEAR TIEMPO */
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return m + ":" + (s < 10 ? "0" + s : s);
+}
+
+/* CARGAR DURACIONES */
+function loadDurations() {
+  document.querySelectorAll("#playlist li").forEach(li => {
+    const audio = new Audio(li.getAttribute("data-src"));
+
+    audio.addEventListener("loadedmetadata", () => {
+      const duration = li.querySelector(".duration");
+      duration.textContent = formatTime(audio.duration);
+    });
+  });
+}
+
 window.onload = () => {
   loadOrder();
   updateNumbers();
+  loadDurations();
 };
 </script>
 
