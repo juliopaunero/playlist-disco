@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Disco Migue 2026</title>
+  <title>Orden del Disco</title>
 
-  <!-- Librería para arrastrar -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
   <style>
@@ -17,24 +16,45 @@
 
     h1 {
       text-align: center;
+      margin-bottom: 5px;
+    }
+
+    p {
+      text-align: center;
+      color: gray;
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 200px;
+      display: block;
+      margin: 10px auto;
+      border-radius: 12px;
     }
 
     ul {
       list-style: none;
       padding: 0;
-      max-width: 500px;
+      max-width: 600px;
       margin: auto;
     }
 
     li {
       background: #222;
-      margin: 8px 0;
+      margin: 10px 0;
       padding: 10px;
+      border-radius: 10px;
+      cursor: grab;
+    }
+
+    .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-radius: 8px;
-      cursor: grab;
+    }
+
+    .active {
+      background: #1db954 !important;
     }
 
     button {
@@ -50,14 +70,28 @@
       background: #1ed760;
     }
 
+    input {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+
     #player {
       display: block;
       margin: 20px auto;
+      width: 100%;
+      max-width: 600px;
     }
 
-    #export {
-      display: block;
-      margin: 20px auto;
+    .controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .controls button {
+      margin: 5px;
       background: #444;
     }
   </style>
@@ -65,9 +99,12 @@
 
 <body>
 
-<h1>Migue 2026</h1>
+<h1>Orden del Disco</h1>
+<p>Arrastrar para reordenar · Escuchar de corrido</p>
 
-<!-- 👇 ACÁ VAN LOS TEMAS -->
+<!-- 🎨 PORTADA -->
+<img src="PEGAR_LINK_TAPA">
+
 <ul id="playlist">
 
   <li data-src="https://www.dropbox.com/scl/fi/m06at81vanme2w04vic1s/01-Caparazon.mp3?rlkey=dgw1n1c6kd2wh3wkc4mk7ggx5&st=zouaiycm&raw=1">
@@ -111,37 +148,94 @@
 
 </ul>
 
-<!-- Reproductor -->
 <audio id="player" controls></audio>
 
-<!-- Botón copiar orden -->
-<button id="export" onclick="exportOrder()">Copiar orden</button>
+<div class="controls">
+  <button onclick="exportOrder()">Copiar orden</button>
+  <button onclick="resetOrder()">Resetear</button>
+</div>
 
 <script>
   const player = document.getElementById("player");
 
   function play(btn) {
-    const li = btn.parentElement;
-    const src = li.getAttribute("data-src");
-    player.src = src;
+    const li = btn.closest("li");
+
+    document.querySelectorAll("li").forEach(el => el.classList.remove("active"));
+    li.classList.add("active");
+
+    player.src = li.getAttribute("data-src");
     player.play();
   }
 
-  new Sortable(document.getElementById("playlist"), {
-    animation: 150
+  player.addEventListener("ended", () => {
+    const current = document.querySelector(".active");
+    if (!current) return;
+
+    const next = current.nextElementSibling;
+    if (next) {
+      next.querySelector("button").click();
+    }
   });
+
+  function updateNumbers() {
+    const items = document.querySelectorAll("#playlist li");
+    items.forEach((item, i) => {
+      const title = item.querySelector(".title");
+      title.textContent = (i + 1) + ". " + title.textContent.replace(/^\d+\.\s/, '');
+    });
+  }
+
+  function saveOrder() {
+    const order = [...document.querySelectorAll("#playlist li")]
+      .map(li => li.getAttribute("data-src"));
+
+    localStorage.setItem("ordenPlaylist", JSON.stringify(order));
+  }
+
+  function loadOrder() {
+    const saved = JSON.parse(localStorage.getItem("ordenPlaylist"));
+    if (!saved) return;
+
+    const list = document.getElementById("playlist");
+    const items = [...list.children];
+
+    saved.forEach(src => {
+      const item = items.find(li => li.getAttribute("data-src") === src);
+      if (item) list.appendChild(item);
+    });
+  }
 
   function exportOrder() {
     const items = document.querySelectorAll("#playlist li");
     let text = "Orden del disco:\n";
 
     items.forEach((item, index) => {
-      text += (index + 1) + ". " + item.childNodes[0].textContent.trim() + "\n";
+      const title = item.querySelector(".title").textContent.replace(/^\d+\.\s/, '');
+      text += (index + 1) + ". " + title + "\n";
     });
 
     navigator.clipboard.writeText(text);
-    alert("Orden copiado al portapapeles");
+    alert("Orden copiado");
   }
+
+  function resetOrder() {
+    localStorage.removeItem("ordenPlaylist");
+    location.reload();
+  }
+
+  new Sortable(document.getElementById("playlist"), {
+    animation: 150,
+    onEnd: () => {
+      updateNumbers();
+      saveOrder();
+    }
+  });
+
+  window.onload = () => {
+    loadOrder();
+    updateNumbers();
+  };
 </script>
 
 </body>
